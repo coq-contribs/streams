@@ -1,5 +1,5 @@
 -R . Streams
--impredicative-set
+-arg -impredicative-set
 
 Eratosthene.v
 GfpStreams.v
