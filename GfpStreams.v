@@ -50,7 +50,7 @@ Let streams := Streams A.
 Definition eq_streams := eq_dep U streams.
 
 Lemma eq_streams_intro : forall (m : U) (X : streams m), eq_streams m X m X.
-red in |- *; auto with v62.
+red in |- *; auto with arith.
 Qed.
 Hint Resolve eq_streams_intro.
 
@@ -69,9 +69,9 @@ Qed.
 
 Lemma out : forall m : U, streams m -> {q : U &  A m q &  streams q}.
 simple induction 1; intros P s y.
-elim (s m); intros; trivial with v62.
-exists x; trivial with v62.
-red in |- *; apply build with P; auto with v62.
+elim (s m); intros; trivial with arith.
+exists x; trivial with arith.
+red in |- *; apply build with P; auto with arith.
 Defined.
 
 Lemma hd : forall m : U, streams m -> U.
@@ -80,15 +80,15 @@ exact x.
 Defined.
 
 Lemma tail : forall (m : U) (X : streams m), streams (hd m X).
-intros; unfold hd in |- *; elim (out m X); auto with v62.
+intros; unfold hd in |- *; elim (out m X); auto with arith.
 Defined.
 
 Lemma out_hd_tail :
  forall (m : U) (X : streams m),
  {q : U &  A m q &  {Y : streams q | eq_streams q Y (hd m X) (tail m X)}}.
 intros; unfold hd, tail in |- *; elim (out m X).
-intros x a Y; exists x; trivial with v62.
-exists Y; trivial with v62.
+intros x a Y; exists x; trivial with arith.
+exists Y; trivial with arith.
 Defined.
 
 Lemma hd_nth : nat -> forall m : U, streams m -> U.
@@ -99,10 +99,10 @@ Defined.
 
 Lemma tail_nth :
  forall (n : nat) (m : U) (X : streams m), streams (hd_nth n m X).
-simple induction n; simpl in |- *; intros; trivial with v62.
+simple induction n; simpl in |- *; intros; trivial with arith.
 (***
-Induction n; Simpl; Intros; Trivial with v62.
-Change (streams (hd_nth y (hd m X) (tail m X))); Trivial with v62.
+Induction n; Simpl; Intros; Trivial with arith.
+Change (streams (hd_nth y (hd m X) (tail m X))); Trivial with arith.
 ***)
 Defined.
 
@@ -111,22 +111,22 @@ Lemma tail_plus :
  eq_streams (hd_nth (n + k) m X) (tail_nth (n + k) m X)
    (hd_nth k (hd_nth n m X) (tail_nth n m X))
    (tail_nth k (hd_nth n m X) (tail_nth n m X)).
-simple induction n; simpl in |- *; trivial with v62.
+simple induction n; simpl in |- *; trivial with arith.
 (***
-Induction n; Simpl; Trivial with v62.
+Induction n; Simpl; Trivial with arith.
 Intros.
 Change (eq_streams (hd_nth (plus y k) (hd m X) (tail m X))
      (tail_nth (plus y k) (hd m X) (tail m X))
      (hd_nth k (hd_nth y (hd m X) (tail m X))
        (tail_nth y (hd m X) (tail m X)))
      (tail_nth k (hd_nth y (hd m X) (tail m X))
-       (tail_nth y (hd m X) (tail m X)))); Trivial with v62.
+       (tail_nth y (hd m X) (tail m X)))); Trivial with arith.
 ***)
 Qed.
 Hint Resolve tail_plus.
 
 Lemma specif : forall (m : U) (X : streams m), A m (hd m X).
-intros; unfold hd in |- *; elim (out m X); auto with v62.
+intros; unfold hd in |- *; elim (out m X); auto with arith.
 Qed.
 
 
@@ -182,45 +182,45 @@ Variable Y : streams q.
 Hypothesis Y_tlX : eq_streams q Y (hd x X) (tail x X).
 
 Lemma P_nth_X_O : P q -> P_nth_X x X 0.
-red in |- *; simpl in |- *; elim Y_tlX; auto with v62.
+red in |- *; simpl in |- *; elim Y_tlX; auto with arith.
 (***
-Red; Change ((P q)->(P (hd x X))); Elim Y_tlX; Auto with v62.
+Red; Change ((P q)->(P (hd x X))); Elim Y_tlX; Auto with arith.
 ***)
 Qed.
 Hint Resolve P_nth_X_O.
 
 Lemma Q_nth_X_O : Q_nth_X x X 0 -> Q q.
-unfold Q_nth_X in |- *; simpl in |- *; elim Y_tlX; auto with v62.
+unfold Q_nth_X in |- *; simpl in |- *; elim Y_tlX; auto with arith.
 (***
-Unfold Q_nth_X; Change ((Q (hd x X))->(Q q)); Elim Y_tlX; Auto with v62.
+Unfold Q_nth_X; Change ((Q (hd x X))->(Q q)); Elim Y_tlX; Auto with arith.
 ***)
 Qed.
 Hint Resolve Q_nth_X_O.
 
 Lemma event_Q_nth_O : eventually (Q_nth_X x X) 0 -> Q q.
-intros; apply Q_nth_X_O; apply event_O; trivial with v62.
+intros; apply Q_nth_X_O; apply event_O; trivial with arith.
 Qed.
 
 Lemma P_nth_X_S : forall m : nat, P_nth_X q Y m -> P_nth_X x X (S m).
 red in |- *; simpl in |- *; intros.
-elim Y_tlX; auto with v62.
+elim Y_tlX; auto with arith.
 (***
 Red; Change ((m:nat)
     (P_nth_X q Y m)
      ->(P (hd_nth m (hd (hd x X) (tail x X)) (tail (hd x X) (tail x X))))).
-Intros; Elim Y_tlX; Auto with v62.
+Intros; Elim Y_tlX; Auto with arith.
 ***)
 Qed.
 Hint Resolve P_nth_X_S.
 
 Lemma Q_nth_X_S : forall m : nat, Q_nth_X x X (S m) -> Q_nth_X q Y m.
 unfold Q_nth_X in |- *; simpl in |- *.
-elim Y_tlX; auto with v62.
+elim Y_tlX; auto with arith.
 (***
 Unfold Q_nth_X ; Change ((m:nat)
     (Q (hd_nth m (hd (hd x X) (tail x X)) (tail (hd x X) (tail x X))))
      ->(Q (hd_nth m (hd q Y) (tail q Y)))).
-Elim Y_tlX; Auto with v62.
+Elim Y_tlX; Auto with arith.
 ***)
 Qed.
 Hint Resolve Q_nth_X_S.
@@ -230,14 +230,14 @@ Lemma event_Q_nth_X_tl :
  ~ Q q -> eventually (Q_nth_X x X) (S l) -> eventually (Q_nth_X q Y) l.
 simple induction 2; red in |- *; intro k.
 pattern k in |- *; apply nat_case.
-intros; absurd (Q q); auto with v62.
-intros; exists m; auto with v62.
+intros; absurd (Q q); auto with arith.
+intros; exists m; auto with arith.
 Qed.
 
 Lemma between_P_nth_X_tl :
  forall l : nat,
  P q -> between (P_nth_X q Y) 0 l -> between (P_nth_X x X) 0 (S l).
-simple induction 2; auto with v62.
+simple induction 2; auto with arith.
 Qed.
 
 End Properties.
@@ -251,8 +251,8 @@ elim (out_hd_tail x X); intros q Axq HY.
 elim HY; intros Y eqY.
 (* the solution is (q,Y,O) because 
    (eventually (Q_nth_X x X) O)->(Q q)  *)
-exists q; apply filter_intro with Y 0; auto with v62.
-apply event_Q_nth_O with x X Y; trivial with v62.
+exists q; apply filter_intro with Y 0; auto with arith.
+apply event_Q_nth_O with x X Y; trivial with arith.
 (* case n = (S y), let q::Y = X *)
 elim (out_hd_tail x X); intros q Axq HY.
 elim HY; intros Y eqY.
@@ -264,19 +264,19 @@ elim H with q Y.
 intros q' f'.
 elim f'; intros B' notR Z m eqm betm.
 (* the solution is (q',Z,(S m)) *)
-exists q'; apply filter_intro with Z (S m); trivial with v62.
+exists q'; apply filter_intro with Z (S m); trivial with arith.
 (* Proof of (B x q') *)
-apply trans_ARB with q; auto with v62.
+apply trans_ARB with q; auto with arith.
 (* Proof of 
      (eq_streams q' Z (hd_nth (S (S m)) x X) (tail_nth (S (S m)) x X)) *)
 change
   (eq_streams q' Z (hd_nth (S m) (hd x X) (tail x X))
      (tail_nth (S m) (hd x X) (tail x X))) in |- *.
-elim eqY; trivial with v62.
-apply between_P_nth_X_tl with q Y; trivial with v62.
-apply event_Q_nth_X_tl with x X; auto with v62.
+elim eqY; trivial with arith.
+apply between_P_nth_X_tl with q Y; trivial with arith.
+apply event_Q_nth_X_tl with x X; auto with arith.
 (* case (Q q), the solution is (q,O,Y) *)
-exists q; apply filter_intro with Y 0; auto with v62.
+exists q; apply filter_intro with Y 0; auto with arith.
 Qed.
 
 Variable x : U.
@@ -307,20 +307,20 @@ Hypothesis eqY : eq_streams (hdX n) (tlX n) p Y.
 Remark hd_nth_tail :
  forall l : nat, hd_nth (S (n + l)) x X = hd_nth (S l) p Y.
 elim eqY; intro.
-replace (S (n + l)) with (n + S l); auto with v62.
-unfold hdX, tlX in |- *; elim (tail_plus n (S l) x X); auto with v62.
+replace (S (n + l)) with (n + S l); auto with arith.
+unfold hdX, tlX in |- *; elim (tail_plus n (S l) x X); auto with arith.
 Qed.
 
 Remark P_nth_X_tail : forall l : nat, P_nth_X p Y l -> P_nth_X x X (n + l).
 unfold P_nth_X in |- *.
-intro; elim hd_nth_tail; auto with v62.
+intro; elim hd_nth_tail; auto with arith.
 Qed.
 Hint Resolve P_nth_X_tail.
 
 Lemma between_between_tail :
  forall m : nat, between (P_nth_X p Y) 0 m -> between (P_nth_X x X) n (n + m).
-simple induction 1; intros; auto with v62.
-replace (n + S l) with (S (n + l)); auto with v62.
+simple induction 1; intros; auto with arith.
+replace (n + S l) with (S (n + l)); auto with arith.
 Qed.
 End Lemmes.
 
@@ -336,18 +336,18 @@ elim (filter_step ln p Y).
 intros q fq; elim fq; intros Bq Rq Z m eqZm betZm.
 cut (eq_streams (hdX (n + S m)) (tlX (n + S m)) q Z).
 intro eqZ; exists q.
-apply Filter_intro with n (n + m); trivial with v62.
-elim HYn; trivial with v62.
-elim eqZ; replace (S (n + m)) with (n + S m); auto with v62.
-apply between_between_tail with p Y; trivial with v62.
-red in |- *; exists Z; exists (n + S m); trivial with v62.
+apply Filter_intro with n (n + m); trivial with arith.
+elim HYn; trivial with arith.
+elim eqZ; replace (S (n + m)) with (n + S m); auto with arith.
+apply between_between_tail with p Y; trivial with arith.
+red in |- *; exists Z; exists (n + S m); trivial with arith.
 apply eq_streams_trans with (hd_nth (S m) p Y) (tail_nth (S m) p Y);
- auto with v62.
+ auto with arith.
 elim HYn.
 exact (tail_plus n (S m) x X).
-elim HYn; trivial with v62.
+elim HYn; trivial with arith.
 (* Initial state : X *)
-red in |- *; exists X; exists 0; auto with v62.
+red in |- *; exists X; exists 0; auto with arith.
 Qed.
 
 End Filter_.
