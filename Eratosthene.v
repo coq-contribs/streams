@@ -56,24 +56,24 @@ Lemma div_mod_O :
 simple induction 2; intros q' Hq'.
 replace r with ((q' - q) * b); intros.
 elim (mult_O_le b (q' - q)); intros.
-rewrite H2; auto with v62.
-absurd (b <= (q' - q) * b); auto with v62.
+rewrite H2; auto with arith.
+absurd (b <= (q' - q) * b); auto with arith.
 rewrite mult_minus_distr_r.
 symmetry  in |- *; apply plus_minus.
-elim H; auto with v62.
+elim H; auto with arith.
 Qed.
 
 Lemma div_dec : forall p q : nat, 0 < p -> {div p q} + {~ div p q}.
-intros; elim modulo with p q; intros; auto with v62.
+intros; elim modulo with p q; intros; auto with arith.
 elim (eq_nat_dec 0 x); intro y0.
 left; elim p0; intros q0 Hq0.
 red in |- *; exists q0.
 elim Hq0; intros.
 rewrite H0.
-elim y0; auto with v62.
-right; red in |- *; intro; absurd (0 = x); trivial with v62.
+elim y0; auto with arith.
+right; red in |- *; intro; absurd (0 = x); trivial with arith.
 elim p0; simple induction 1; intros.
-apply div_mod_O with q p x0; auto with v62.
+apply div_mod_O with q p x0; auto with arith.
 Qed.
 
 (***************************************************************************)
@@ -137,7 +137,7 @@ Lemma Filtrebuild :
 intros.
 red in |- *.
 intros.
-apply (H2 P); trivial with v62.
+apply (H2 P); trivial with arith.
 Qed.
 
 (***************************************************************************)
@@ -147,7 +147,7 @@ Qed.
 Lemma Filtrehd : forall p n : nat, Filtre p n -> natext p n.
 intros.
 apply H.
-auto with v62.
+auto with arith.
 Qed.
 Hint Immediate Filtrehd.
 
@@ -159,7 +159,7 @@ Lemma Filtretl : forall p n : nat, Filtre p n -> Filtre p (S n).
 intros.
 apply H.
 intros.
-apply Filtrebuild with P; auto with v62.
+apply Filtrebuild with P; auto with arith.
 Qed.
 Hint Resolve Filtretl.
 
@@ -170,7 +170,7 @@ Hint Resolve Filtretl.
 (***************************************************************************)
 Lemma lemme1 : forall q p : nat, divinf p q -> divinf p (S q).
 simple induction 1; intros.
-apply Bs with r; auto with v62.
+apply Bs with r; auto with arith.
 Qed.
 Hint Resolve lemme1.
 
@@ -183,11 +183,11 @@ Hint Resolve lemme1.
 
 Lemma Sift : forall p n : nat, 1 <= p -> Filtre p n -> Filtre (S p) n.
 intros.
-apply Filtrebuild with (Filtre p); auto with v62.
-intros; elim (Filtrehd p q); intros; auto with v62.
-elim (div_dec (S p) q); auto with v62.
+apply Filtrebuild with (Filtre p); auto with arith.
+intros; elim (Filtrehd p q); intros; auto with arith.
+elim (div_dec (S p) q); auto with arith.
 intros; apply Div.
-apply Bs with (S p); auto with v62.
+apply Bs with (S p); auto with arith.
 Qed.
 
 
@@ -211,7 +211,7 @@ Lemma Eratobuild :
  (forall q : nat, P q -> natext q (S q)) ->
  (forall q : nat, P q -> P (S q)) -> P 1 -> Eratosthene.
 red in |- *; intros.
-apply (H2 P); auto with v62.
+apply (H2 P); auto with arith.
 Qed.
 
 
@@ -224,7 +224,7 @@ Qed.
 
 Lemma lemme2 :
  forall q r : nat, divinf (S q) q -> natext q r -> natext (S q) r.
-simple induction 2; auto with v62.
+simple induction 2; auto with arith.
 Qed.
 Hint Resolve lemme2.
 
@@ -247,16 +247,16 @@ Hint Resolve Predintro.
 Theorem Crible : Eratosthene.
 apply Eratobuild with Pred.  (* Elimination du "il existe" ds Eratobuild *)
 intros; apply Filtrehd.
-elim H; trivial with v62.
+elim H; trivial with arith.
 intros; elim H; intros.
-apply Predintro; auto with v62.
+apply Predintro; auto with arith.
 elim (Filtrehd q (S q) f); intro.
 apply Filtretl.
-apply Sift; auto with v62.
+apply Sift; auto with arith.
 apply f; intros.
-apply Filtrebuild with P; auto with v62. 
-apply Predintro; auto with v62.
-apply Filtrebuild with (natext 1); auto with v62.
+apply Filtrebuild with P; auto with arith. 
+apply Predintro; auto with arith.
+apply Filtrebuild with (natext 1); auto with arith.
 Qed.
 
 
