@@ -1,7 +1,7 @@
 Name: Streams
 Title: Specification of Eratosthene Sieve 
-Author: François Leclerc, Christine Paulin-Mohring
-Institution: Ecole Normale Supérieure de Lyon
+Author: FranÃ§ois Leclerc, Christine Paulin-Mohring
+Institution: Ecole Normale SupÃ©rieure de Lyon
 Description: Proof of Eratosthene Sieve formalised using streams
 encoded as greatest fixpoints. See paper:
 @InProceedings{LePa94,
